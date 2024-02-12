@@ -16,3 +16,46 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.homepage-container {
+    text-align: center;
+}
+
+.banner {
+    position: relative;
+    color: white;
+}
+
+.banner-image {
+    width: 100%;
+    height: auto;
+}
+
+.features-section {
+    margin-top: 30px;
+}
+
+.features {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.feature-item {
+    width: 30%;
+}
+
+.feature-image {
+    width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+a {
+    color: #007bff; /* Adjust the color to match your site's theme */
+    text-decoration: none; /* Optional: if you prefer links without underlines */
+}
+
+    a:hover {
+        text-decoration: underline; /* Optional: if you want a hover effect on links */
+    }

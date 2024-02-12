@@ -1,8 +1,40 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "PlatHub - Your Game Library";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="display-4">Welcome to PlatHub</h1>
+        <p>Your game library manager.</p>
+         <img src="placeholder" alt="PlatHub Logo" class="mt-3" style="max-width: 200px; height: auto;">
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <img src="~/placeholder" class="card-img-top" alt="Search Games">
+                <div class="card-body">
+                    <h5 class="card-title"><a asp-controller="Home" asp-action="Search" class="stretched-link">Search Games</a></h5>
+                    <p class="card-text">Find all games in any library.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <img src="~/placeholder" class="card-img-top" alt="View Collections">
+                <div class="card-body">
+                    <h5 class="card-title"><a asp-controller="Home" asp-action="View" class="stretched-link">View Collections</a></h5>
+                    <p class="card-text">Browse the details of your game library.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <img src="~/placeholder" class="card-img-top" alt="Manage Library">
+                <div class="card-body">
+                    <h5 class="card-title"><a asp-controller="Home" asp-action="Library" class="stretched-link">Manage Library</a></h5>
+                    <p class="card-text">Organize, update, and curate your game collection.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
