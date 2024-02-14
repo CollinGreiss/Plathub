@@ -16,7 +16,7 @@ namespace Plathub.Controllers {
 
 		public IActionResult Index() {
 
-			Games.GetTask().Wait();
+			IGDB.GetTask().Wait();
 			return View();
 
 		}
