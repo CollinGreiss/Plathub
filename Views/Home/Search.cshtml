@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Search Games";
+}
+
+<div class="container mt-5">
+    <h2>Search Games</h2>
+    <form method="get" asp-controller="Games" asp-action="Search">
+        <div class="form-group">
+            <label for="searchQuery"></label>
+            <input type="text" class="form-control" id="searchQuery" name="searchQuery" placeholder="Enter game title">
+        </div>
+        <div class="form-group">
+            <label for="genre"></label>
+            <select class="form-control" id="genre" name="genre">
+                <option value="">Select Genre</option>
+                <option value="Action">Action</option>
+                <option value="Adventure">Adventure</option>
+                
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="platform"></label>
+            <select class="form-control" id="platform" name="platform" placeholder="Select Platform">
+                <option value="">Select Platform</option>
+                <option value="PC">PC</option>
+                <option value="Console">Console</option>
+               
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2" asp-controller="Home" asp-action="">Search</button>
+    </form>
+</div>
