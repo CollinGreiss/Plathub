@@ -2,6 +2,7 @@
     ViewData["Title"] = "PlatHub - Your Game Library";
 }
 
+
 <div class="container mt-5">
     <div class="text-center mb-4">
         <h1 class="display-4">Welcome to PlatHub</h1>
@@ -34,6 +35,15 @@
                     <h5 class="card-title"><a asp-controller="Home" asp-action="Library" class="stretched-link">Manage Library</a></h5>
                     <p class="card-text">Organize, update, and curate your game collection.</p>
                 </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <!-- Container with border -->
+            <div class="image-container">
+                <!-- Main image -->
+                <img src="@Url.Content("~/images/redDead.jpg")" alt="Red Dead" class="center">
+                <!-- Background container for the border -->
+                <div class="background-container" style="background-image: url('@Url.Content("~/images/platGameCard.png")');"></div>
             </div>
         </div>
     </div>

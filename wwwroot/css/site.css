@@ -59,3 +59,45 @@ a {
     a:hover {
         text-decoration: underline; /* Optional: if you want a hover effect on links */
     }
+
+/* Define container style */
+.image-container {
+    display: inline-block;
+    position: relative;
+    padding: 10px; /* Adjust padding to control the border width */
+    border-radius: 20px; /* Adjust border-radius to control the roundness of the border */
+    overflow: hidden; /* Ensure that rounded corners clip the content */
+}
+
+/* Define background container style */
+.background-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 110%; /* Adjust the width to be slightly larger than the image */
+    height: 100%;
+    background-image: url('@Url.Content("~/images/platGameCard.png")'); /* Specify the border image */
+    background-size: cover; /* Ensure the background image covers the container */
+    background-repeat: no-repeat; /* Prevent the background image from repeating */
+    background-position: center; /* Center the background image */
+    z-index: -1; /* Ensure the background image is behind the main image */
+}
+
+/* Center the main image */
+.center {
+    display: block;
+    margin: auto;
+    position: relative; /* Ensure the main image stays on top */
+    z-index: 1; /* Ensure the main image is above the background image */
+    border-radius: 10px; /* Adjust border-radius to control the roundness of the image */
+    overflow: hidden; /* Ensure that rounded corners clip any overflow from the image */
+}
+
+.reflection {
+    position: absolute;
+    bottom: -30px; /* Adjust distance of reflection from the original image */
+    left: 0;
+    right: 0;
+    transform: scaleY(-1);
+    opacity: 0.5; /* Adjust opacity of reflection as needed */
+}
