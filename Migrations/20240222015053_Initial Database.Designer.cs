@@ -12,8 +12,8 @@ using Plathub.Data;
 namespace Plathub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240222012932_Initial Models")]
-    partial class InitialModels
+    [Migration("20240222015053_Initial Database")]
+    partial class InitialDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -224,23 +224,6 @@ namespace Plathub.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("Plathub.Models.Game", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Games");
                 });
 
             modelBuilder.Entity("Plathub.Models.UserGame", b =>

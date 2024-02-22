@@ -7,7 +7,6 @@ using System.Security.Claims;
 namespace Plathub.Data {
 	public class ApplicationDbContext : IdentityDbContext {
 		public ApplicationDbContext( DbContextOptions<ApplicationDbContext> options ) : base( options ) {}
-		public DbSet<Game> Games {  get; set; }
 		public DbSet<UserGame> UserGames {  get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
