@@ -1,9 +1,12 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Dynamic;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
 using IGDB;
 using IGDB.Models;
+using Plathub.Models;
+using static Plathub.Data.GenreData;
 
 namespace Plathub.APIs;
 
@@ -22,16 +25,29 @@ public class GamesAPI {
 
 	}
 
-	public static async Task<Game[]> SearchGames( int id ) {
+	public static async Task<Game[]> SearchGames( GameGenre[] genres ) {
 
 		var igdb = new IGDBClient( "dc89wkvj5vk53gddargvkmbml0k19o", "qsoyhxogfxuyl92px7gy56qpbjdaiz" );
 
-		var games = await igdb.QueryAsync<Game>( IGDBClient.Endpoints.Games, query: $"fields *; where genres = (1, 2); " );
-		return games;
+		string genreQuery = "(" + (int) genres[0];
+
+		for ( int i = 1; i < genres.Length; i++ ) {
+
+			genreQuery += (int) genres[i];
+
+        }
+
+        genreQuery += ")";
+
+		var games = await igdb.QueryAsync<Game>( IGDBClient.Endpoints.Games, query: $"fields *; where genres = {genreQuery}; " );
+
+
+        return games;
 
 	}
 
-	public static async Task<Game> GetGame( int id ) {
+
+    public static async Task<Game> GetGame( int id ) {
 
 		var igdb = new IGDBClient( "dc89wkvj5vk53gddargvkmbml0k19o", "qsoyhxogfxuyl92px7gy56qpbjdaiz" );
 
@@ -56,7 +72,7 @@ public class GamesAPI {
 		foreach ( var id in game.ExternalGames.Ids ) {
 
 			var test = await igdb.QueryAsync<ExternalGame>( IGDBClient.Endpoints.ExternalGames, query: $"fields *; where id = {id}; " );
-			
+
 			if ( test == null || test.Length == 0 ) continue;
 
 			var data = test[0];
