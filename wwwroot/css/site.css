@@ -14,7 +14,13 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+}
+.bodyss {
+    padding: 0;
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
 }
 
 .homepage-container {
@@ -74,9 +80,8 @@ a {
     position: absolute;
     top: 0;
     left: 0;
-    width: 110%; /* Adjust the width to be slightly larger than the image */
+    width: 100%; /* Adjust the width to be slightly larger than the image */
     height: 100%;
-    background-image: url('@Url.Content("~/images/platGameCard.png")'); /* Specify the border image */
     background-size: cover; /* Ensure the background image covers the container */
     background-repeat: no-repeat; /* Prevent the background image from repeating */
     background-position: center; /* Center the background image */
