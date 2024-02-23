@@ -29,10 +29,16 @@ public class HomeController : Controller {
 
     }
 
-    public IActionResult Search() {
-
+	}
+  
+  public IActionResult Search() {
+    
+    return View();
+    
+  }
+    public IActionResult Library()
+    {
         return View();
-
     }
 
     public IActionResult FindGame( string searchQuery, string genre, string? platform ) {
