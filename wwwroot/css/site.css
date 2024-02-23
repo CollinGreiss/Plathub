@@ -52,10 +52,60 @@ body {
 }
 
 a {
-    color: #007bff; /* Adjust the color to match your site's theme */
-    text-decoration: none; /* Optional: if you prefer links without underlines */
+    color: #007bff;
+    text-decoration: none; 
 }
 
     a:hover {
-        text-decoration: underline; /* Optional: if you want a hover effect on links */
+        text-decoration: underline;
     }
+
+.game-tile {
+    margin-bottom: 15px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+    transition: transform .2s ease-in-out, opacity .2s ease-in-out;
+    cursor: pointer;
+    position: relative;
+}
+
+.game-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+    padding: 5px 0;
+    font-size: 1rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    transition: background-color .2s ease-in-out;
+}
+
+.game-tile:hover .game-title {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.game-tile:hover img {
+    z-index: -1;
+}
+
+
+.img-fluid.d-none {
+    display: block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    position: absolute;
+}
+/*Adds margin to top*/
+.container-fluid .row:first-child {
+    margin-top: 20px;
+}
+

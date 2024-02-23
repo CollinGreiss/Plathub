@@ -1,6 +1,17 @@
-﻿@{
-    ViewData["Title"] = "Library";
-}
-<div class="container mt-5">
-    <h2></h2>
+﻿@model IEnumerable<GameLibrary.Models.Games>
+
+<div class="container-fluid px-4 mt-3">
+    
+    <div class="row">
+        @foreach (var game in Model)
+        {
+            <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                <div class="game-tile" style="background-image: url('@game.Image');">
+                   
+                    <img src="@game.Image" alt="@game.Title Cover Art" class="img-fluid d-none">
+                    <div class="game-title">@game.Title</div> <!-- Game title -->
+                </div>
+            </div>
+        }
+    </div>
 </div>
