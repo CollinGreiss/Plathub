@@ -1,4 +1,4 @@
-﻿namespace Plathub.Data;
+﻿namespace Plathub.Models;
 public class GenreData {
 
     public enum GameGenre {
@@ -28,9 +28,10 @@ public class GenreData {
 
     }
 
-    public static GameGenre[] GetGenres( int id ) {
+    public static GameGenre[]? GetGenres( int? id ) {
 
-        return GetGenres( new int[] { id } );
+		if ( id == null ) return null;
+        return GetGenres( new int[] { (int) id } );
 
     }
 
@@ -47,5 +48,23 @@ public class GenreData {
         return genres;
 
     }
+
+
+
+	public static string GetGenreQuery( GameGenre[] genres ) {
+
+		var query = "genres = (" + (int) genres[0];
+
+		for ( int i = 1; i < genres.Length; i++ ) {
+
+			query += (int) genres[i];
+
+		}
+
+		query += ")";
+
+		return query;
+
+	}
 
 }

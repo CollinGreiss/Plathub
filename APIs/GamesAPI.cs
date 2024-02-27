@@ -6,7 +6,7 @@ using System.Text.Json;
 using IGDB;
 using IGDB.Models;
 using Plathub.Models;
-using static Plathub.Data.GenreData;
+using static Plathub.Models.GenreData;
 
 namespace Plathub.APIs;
 
@@ -16,9 +16,26 @@ public class GamesAPI {
 	// https://github.com/kamranayub/igdb-dotnet/blob/master/README.md
 	// https://api-docs.igdb.com/#getting-started
 
-	public static async Task<Game[]> SearchGames( string search ) {
+	private static IGDBClient igdb = new IGDBClient( "dc89wkvj5vk53gddargvkmbml0k19o", "qsoyhxogfxuyl92px7gy56qpbjdaiz" );
 
-		var igdb = new IGDBClient( "dc89wkvj5vk53gddargvkmbml0k19o", "qsoyhxogfxuyl92px7gy56qpbjdaiz" );
+	public static async Task<Game[]> SearchGames(string search, GameGenre[]? genres, string? platform, int limit = 10 ) {
+
+		var filter = $"fields *; limit {limit};";
+
+		if (search.Length > 0) filter += $" search \"{search}\";";
+
+		if (genres != null) filter += " where " + GenreData.GetGenreQuery( genres );
+
+		if ( platform == null && genres != null ) filter += "";
+		else if ( genres != null ) filter += ";"; //where platform = 
+		//else filter += "where platform = 2;";
+
+		var games = await igdb.QueryAsync<Game>( IGDBClient.Endpoints.Games, query: filter );
+		return games;
+
+	}
+
+	public static async Task<Game[]> SearchGames( string search ) {
 
 		var games = await igdb.QueryAsync<Game>( IGDBClient.Endpoints.Games, query: $"fields *; search \"{search}\"; where category = 0; " );
 		return games;
@@ -27,29 +44,16 @@ public class GamesAPI {
 
 	public static async Task<Game[]> SearchGames( GameGenre[] genres ) {
 
-		var igdb = new IGDBClient( "dc89wkvj5vk53gddargvkmbml0k19o", "qsoyhxogfxuyl92px7gy56qpbjdaiz" );
+		string genreQuery = GenreData.GetGenreQuery( genres );
 
-		string genreQuery = "(" + (int) genres[0];
-
-		for ( int i = 1; i < genres.Length; i++ ) {
-
-			genreQuery += (int) genres[i];
-
-        }
-
-        genreQuery += ")";
-
-		var games = await igdb.QueryAsync<Game>( IGDBClient.Endpoints.Games, query: $"fields *; where genres = {genreQuery}; " );
+		var games = await igdb.QueryAsync<Game>( IGDBClient.Endpoints.Games, query: $"fields *; where {genreQuery}; " );
 
 
         return games;
 
 	}
 
-
-    public static async Task<Game> GetGame( int id ) {
-
-		var igdb = new IGDBClient( "dc89wkvj5vk53gddargvkmbml0k19o", "qsoyhxogfxuyl92px7gy56qpbjdaiz" );
+	public static async Task<Game> GetGame( int id ) {
 
 		var games = await igdb.QueryAsync<Game>( IGDBClient.Endpoints.Games, query: $"fields *; where id = {id}; " );
 		return games[0];
@@ -58,8 +62,6 @@ public class GamesAPI {
 
 	public static async Task<PlatformWebsite> GetWebsites( int id ) {
 
-		var igdb = new IGDBClient( "dc89wkvj5vk53gddargvkmbml0k19o", "qsoyhxogfxuyl92px7gy56qpbjdaiz" );
-
 		var website = await igdb.QueryAsync<PlatformWebsite>( IGDBClient.Endpoints.PlatformWebsites, query: $"fields *; where id = {id}; " );
 		return website[0];
 
@@ -67,7 +69,7 @@ public class GamesAPI {
 
 	public static async Task<int> GetSteamID( Game game ) {
 
-		var igdb = new IGDBClient( "dc89wkvj5vk53gddargvkmbml0k19o", "qsoyhxogfxuyl92px7gy56qpbjdaiz" );
+		if ( game.ExternalGames == null || game.ExternalGames.Ids == null || game.ExternalGames.Ids.Length == 0 ) return -1;
 
 		foreach ( var id in game.ExternalGames.Ids ) {
 
@@ -86,5 +88,14 @@ public class GamesAPI {
 		return -1;
 
 	}
+
+	public static async Task<Cover> GetCover( long id ) {
+
+		var cover = await igdb.QueryAsync<Cover>( IGDBClient.Endpoints.Covers, query: $"fields *; where id = {id}; " );
+		return cover[0];
+
+	}
+
+	
 
 }

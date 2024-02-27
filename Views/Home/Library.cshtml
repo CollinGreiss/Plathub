@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GameLibrary.Models.Games>
+﻿@model IEnumerable<GameData>
 
 <div class="container-fluid px-4 mt-3">
     
@@ -9,7 +9,7 @@
                 <div class="game-tile" style="background-image: url('@game.Image');">
                    
                     <img src="@game.Image" alt="@game.Title Cover Art" class="img-fluid d-none">
-                    <div class="game-title">@game.Title</div> <!-- Game title -->
+                    <div class="game-title">@game.Title</div> 
                 </div>
             </div>
         }
