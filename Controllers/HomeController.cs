@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Plathub.APIs;
 using Plathub.Data;
+using Plathub.Interfaces;
 using Plathub.Models;
 using System.Diagnostics;
 
@@ -9,12 +10,11 @@ namespace Plathub.Controllers;
 
 public class HomeController : Controller {
 
-	private readonly ILogger<HomeController> _logger;
+    IDataAccessLayer dal;
 
-	public HomeController( ILogger<HomeController> logger ) {
+    public HomeController( IDataAccessLayer dal ) {
 
-		_logger = logger;
-
+		this.dal = dal;
 	}
 
 	public IActionResult Index() {

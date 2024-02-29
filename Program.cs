@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Plathub.Data;
+using Plathub.Interfaces;
 
 var builder = WebApplication.CreateBuilder( args );
 
@@ -30,6 +31,7 @@ builder.Services.AddAuthentication( options => {
 builder.Services.AddDefaultIdentity<IdentityUser>( options => options.SignIn.RequireConfirmedAccount = true )
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<IDataAccessLayer, UserGameDAL>();
 
 var app = builder.Build();
 
