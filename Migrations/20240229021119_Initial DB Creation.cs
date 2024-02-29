@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Plathub.Migrations
 {
-    public partial class InitialDatabase : Migration
+    public partial class InitialDBCreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -53,7 +53,7 @@ namespace Plathub.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    GameId = table.Column<int>(type: "int", nullable: false)
+                    GameId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {

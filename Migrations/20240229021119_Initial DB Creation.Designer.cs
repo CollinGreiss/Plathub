@@ -12,8 +12,8 @@ using Plathub.Data;
 namespace Plathub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240222015053_Initial Database")]
-    partial class InitialDatabase
+    [Migration("20240229021119_Initial DB Creation")]
+    partial class InitialDBCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -232,8 +232,8 @@ namespace Plathub.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnOrder(0);
 
-                    b.Property<int>("GameId")
-                        .HasColumnType("int")
+                    b.Property<long>("GameId")
+                        .HasColumnType("bigint")
                         .HasColumnOrder(1);
 
                     b.HasKey("UserId", "GameId");

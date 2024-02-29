@@ -5,6 +5,7 @@ using Plathub.Data;
 using Plathub.Interfaces;
 using Plathub.Models;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace Plathub.Controllers;
 
@@ -38,13 +39,15 @@ public class HomeController : Controller {
 	}
 	public IActionResult Library( Game?[] games) {
 
-		List<GameData> model = new List<GameData>();
+		/*List<GameData> model = new List<GameData>();
 
 		foreach ( Game game in games ) {
 		
 			model.Add( new GameData(game) );
 		
-		}
+		}*/
+
+		var model = dal.GetGameDataByUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
 		return View(model);
 

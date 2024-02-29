@@ -230,8 +230,8 @@ namespace Plathub.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnOrder(0);
 
-                    b.Property<int>("GameId")
-                        .HasColumnType("int")
+                    b.Property<long>("GameId")
+                        .HasColumnType("bigint")
                         .HasColumnOrder(1);
 
                     b.HasKey("UserId", "GameId");
