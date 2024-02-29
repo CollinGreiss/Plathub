@@ -8,6 +8,6 @@ namespace Plathub.Models
         [Key, Column(Order = 0)]
         public string UserId { get; set; }
         [Key, Column(Order = 1)]
-        public int GameId { get; set; }
+        public long GameId { get; set; }
     }
 }
