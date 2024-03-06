@@ -7,6 +7,7 @@ using IGDB;
 using IGDB.Models;
 using Plathub.Models;
 using static Plathub.Models.GenreData;
+using static Plathub.Models.PlatformData;
 
 namespace Plathub.APIs;
 
@@ -18,17 +19,17 @@ public class GamesAPI {
 
 	private static IGDBClient igdb = new IGDBClient( "dc89wkvj5vk53gddargvkmbml0k19o", "qsoyhxogfxuyl92px7gy56qpbjdaiz" );
 
-	public static async Task<Game[]> SearchGames(string search, GameGenre[]? genres, string? platform, int limit = 10 ) {
+	public static async Task<Game[]> SearchGames(string search, GameGenre[]? genres, GamePlatform[]? platform, int limit = 10 ) {
 
 		var filter = $"fields *; limit {limit};";
 
-		if (search.Length > 0) filter += $" search \"{search}\";";
+		if ( search == null || search.Length > 0) filter += $" search \"{search}\";";
 
 		if (genres != null) filter += " where " + GenreData.GetGenreQuery( genres );
-
-		if ( platform == null && genres != null ) filter += "";
-		else if ( genres != null ) filter += ";"; //where platform = 
-		//else filter += "where platform = 2;";
+		
+		if ( platform == null && genres != null ) filter += ";";
+		else if ( platform != null && genres != null ) filter += " & " + PlatformData.GetPlatformQuery( platform ) + ";";
+		else if ( platform != null && genres == null ) filter += "where " + PlatformData.GetPlatformQuery( platform ) + ";";
 
 		var games = await igdb.QueryAsync<Game>( IGDBClient.Endpoints.Games, query: filter );
 		return games;
@@ -96,6 +97,5 @@ public class GamesAPI {
 
 	}
 
-	
 
 }

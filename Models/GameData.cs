@@ -1,53 +1,82 @@
 ﻿using IGDB.Models;
 using Plathub.APIs;
 using Plathub.Data;
+using System.Linq;
+using static Plathub.Models.GenreData;
+using static Plathub.Models.PlatformData;
 
 namespace Plathub.Models;
 
 public class GameData {
 
-	//IEnumerable<GenreData.GameGenre> Genres;
+	public long id;
+	public string title;
+	public string image;
+	public int? steamID;
+	public string? releaseDate;
+	public string? year;
+	public GameGenre[] genres;
+	public GamePlatform[] platforms;
 
-	public long ID;
-	public string Title;
-	public string Image;
-	public int? SteamID;
 
-
-	public GameData( Game game ) {
+    public GameData( Game game ) {
 
 		if ( game.Id == null ) return;
-		ID = (long) game.Id;
+		id = (long) game.Id;
 
-		Title = game.Name;
+        var task = GamesAPI.GetSteamID( game );
+
+        title = game.Name;
 		if ( game.Cover != null ) {
 
 			var CoverTask = GamesAPI.GetCover( (long) game.Cover.Id );
 			CoverTask.Wait();
 			var cover = CoverTask.Result;
 
-			Image = cover.Url;
+			image = cover.Url;
 			
 
 		}
-		else Image = "https://i.kym-cdn.com/entries/icons/original/000/028/315/cover.jpg";
+		else image = "https://i.kym-cdn.com/entries/icons/original/000/028/315/cover.jpg";
 
-		//ReleaseDate = game.ReleaseDates.Values.FirstOrDefault().Date.ToString();
+		year = game.ReleaseDates.Ids.FirstOrDefault().ToString();
 
-		var task = GamesAPI.GetSteamID( game );
-		task.Wait();
+        if (game.Genres != null ) {
 
-		SteamID = task.Result;
-		if ( SteamID == -1 ) SteamID = null;
+            var genresList = new List<GameGenre>();
+
+            foreach ( var genre in game.Genres.Ids ) {
+
+                if ( genre != null )
+                    genresList.Append( (GameGenre) genre );
+
+            }
+
+            genres = genresList.ToArray();
+
+        }
+
+		if ( game.Platforms != null ) {
+
+            var platformList = new List<GamePlatform>();
+
+            foreach ( var platform in game.Platforms.Ids ) {
+
+                if ( platform != null )
+                    platformList.Append( (GamePlatform) platform );
+
+            }
+
+            platforms = platformList.ToArray();
+
+        }
+
+        task.Wait();
+
+		steamID = task.Result;
+		if ( steamID == -1 ) steamID = null;
 
 
-		/*foreach ( var genre in game.Genres.Values ) {
-
-			//if ( genre.Id != null)
-				//genres.Append( (GenreData.GameGenre) genre.Id );
-
-		}*/
-
-	}
+    }
 
 }

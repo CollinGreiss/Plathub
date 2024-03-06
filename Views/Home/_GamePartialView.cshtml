@@ -1,8 +1,5 @@
 ﻿@model GameData
 
-<div class="game-image">
-    <img src="@Model.Image" alt="@Model.Title Cover Art" class="img-fluid" />
-</div>
-<div class="game-title">
-    <span>@Model.Title</span>
-</div>
+<img src="@Model.image" alt="@Model.title" class="foreground-image center">
+<div class="background-image-card"></div>
+<div class="game-title">@Model.title</div>

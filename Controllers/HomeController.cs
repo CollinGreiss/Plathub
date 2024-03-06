@@ -1,4 +1,5 @@
-﻿using IGDB.Models;
+﻿using Humanizer.Localisation;
+using IGDB.Models;
 using Microsoft.AspNetCore.Mvc;
 using Plathub.APIs;
 using Plathub.Data;
@@ -15,31 +16,49 @@ public class HomeController : Controller {
 
     public HomeController( IDataAccessLayer dal ) {
 
-		this.dal = dal;
-	}
+        this.dal = dal;
+    }
 
-	public IActionResult Index() {
+    public IActionResult Index() {
 
 
+        return RedirectToAction( "FindGame", new { searchQuery = "Concrete Jungle"} );
 
-		return View();
+        //return View();
 
-	}
+    }
 
-	public IActionResult Privacy() {
+    public IActionResult GameDetails( int id ) {
 
-		return View();
+        var task = GamesAPI.GetGame(id);
+        task.Wait();
+        var game = new GameData( task.Result );
 
-	}
+        if ( game == null ) {
 
-	public IActionResult Search() {
+            return NotFound();
 
-		return View();
+        }
 
-	}
-	public IActionResult Library( Game?[] games) {
+        return View( game );
+    
+    }
 
-		/*List<GameData> model = new List<GameData>();
+
+    public IActionResult Privacy() {
+
+        return View();
+
+    }
+
+    public IActionResult Search() {
+
+        return View();
+
+    }
+    public IActionResult Library( Game?[] games ) {
+
+        /*List<GameData> model = new List<GameData>();
 
 		foreach ( Game game in games ) {
 		
@@ -47,36 +66,38 @@ public class HomeController : Controller {
 		
 		}*/
 
-		var model = dal.GetGameDataByUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var model = dal.GetGameDataByUserId( User.FindFirstValue( ClaimTypes.NameIdentifier ) );
 
-		return View(model);
+        return View( model );
 
-	}
+    }
 
-	public IActionResult FindGame( string searchQuery, string? genre, string? platform ) {
+    public IActionResult FindGame( string searchQuery, string? genre, string? platform ) {
 
-		var genres = ( genre == null ) ? null : GenreData.GetGenres( Int32.Parse( genre ) );
-		var task = GamesAPI.SearchGames( searchQuery,  genres, platform, 25 );
-		task.Wait();
-		var games = task.Result;
+        var genres = ( genre == null ) ? null : GenreData.GetGenres( Int32.Parse( genre ) );
+        var platforms = ( platform == null ) ? null : PlatformData.GetPlatforms( Int32.Parse( platform ) );
 
-		List<GameData> model = new List<GameData>();
+        var task = GamesAPI.SearchGames( searchQuery, genres, platforms, 25 );
+        task.Wait();
+        var games = task.Result;
 
-		foreach ( Game game in games ) {
+        List<GameData> model = new List<GameData>();
 
-			model.Add( new GameData( game ) );
+        foreach ( Game game in games ) {
 
-		}
+            model.Add( new GameData( game ) );
 
-		return View( "Library", model );
-		
-	}
+        }
 
-	[ResponseCache( Duration = 0, Location = ResponseCacheLocation.None, NoStore = true )]
-	public IActionResult Error() {
+        return View( "Library", model );
 
-		return View( new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier } );
+    }
 
-	}
+    [ResponseCache( Duration = 0, Location = ResponseCacheLocation.None, NoStore = true )]
+    public IActionResult Error() {
+
+        return View( new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier } );
+
+    }
 
 }

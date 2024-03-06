@@ -167,3 +167,162 @@ a {
     word-break: break-word !important;
 
 }
+
+.container-test, .container-nested {
+    position: relative;
+    border: 1px solid #c8c7c9;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 20px;
+    color: white;
+}
+
+.container-test {
+    background-color: #020030;
+    color: white;
+}
+
+.container-nested {
+    background-color: #030142;
+}
+
+.tablinks {
+    border: 1px solid #c8c7c9;
+    background-color: #030142;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 10px;
+    color: white;
+}
+
+    .tablinks:hover {
+        background-color: blue;
+    }
+
+.game-tile {
+    margin-bottom: 15px;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    width: 100%;
+    transition: transform .2s ease-in-out, opacity .2s ease-in-out;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.game-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 80%;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+    padding: 5px 0;
+    font-size: 1rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    transition: background-color .2s ease-in-out;
+    overflow: hidden;
+}
+
+/* Ensure image doesn't exceed container width */
+.game-tile img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Define background container style */
+/* Define container style */
+.image-container {
+    display: inline-block;
+    position: relative;
+    padding: 10px; /* Adjust padding to control the border width */
+    border-radius: 20px; /* Adjust border-radius to control the roundness of the border */
+    overflow: hidden; /* Ensure that rounded corners clip the content */
+    z-index: 2;
+}
+
+.background-container {
+    padding: 20px;
+    background-image: url('../images/platGameCard.png');
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Ensure the background container clips the image */
+}
+
+.image-container-card {
+    display: inline-block;
+    position: relative;
+    padding: 10px; /* Adjust padding to control the border width */
+    border-radius: 20px; /* Adjust border-radius to control the roundness of the border */
+    overflow: hidden; /* Ensure that rounded corners clip the content */
+    width: contain;
+    height: contain;
+}
+
+/* Define background container style */
+.background-container-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; /* Adjust the width to be slightly larger than the image */
+    height: 100%;
+    background-image: url('../images/platGameCard.png');
+    background-size: cover; /* Ensure the background image covers the container */
+    background-repeat: no-repeat; /* Prevent the background image from repeating */
+    background-position: center; /* Center the background image */
+    z-index: -1; /* Ensure the background image is behind the main image */
+}
+
+.background-image-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-image: url('../images/platGameCard.png');
+    z-index: -1; /* Send it behind the foreground image */
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adjust according to your preference */
+    grid-gap: 10px; /* Adjust the gap between grid items */
+}
+
+.grid-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+
+.foreground-image {
+    width: 90%;
+    height: 90%;
+    object-fit: cover;
+}
+
+.image-resize {
+    display: block;
+    width: 100%; /* Make the image fill the background container */
+    height: auto; /* Maintain the aspect ratio of the image */
+    border-radius: 20px;
+}
+
+.center-image {
+    position: relative; /* Ensure the main image stays on top */
+    z-index: 1; /* Ensure the main image is above the background image */
+    border-radius: 10px; /* Adjust border-radius to control the roundness of the image */
+    overflow: hidden; /* Ensure that rounded corners clip any overflow from the image */
+}

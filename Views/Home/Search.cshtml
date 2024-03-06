@@ -1,4 +1,5 @@
 ﻿@using static Plathub.Models.GenreData
+@using static Plathub.Models.PlatformData
 @{
     ViewData["Title"] = "Search Games";
 }
@@ -42,8 +43,17 @@
             <select class="form-control" id="platform" name="platform" placeholder="Select Platform">
 
                 <option value="">Select Platform</option>
-                <option value="PC">PC</option>
-                <option value="Console">Console</option>
+                @{
+
+                    foreach ( GamePlatform platform in Enum.GetValues( typeof( GamePlatform ) ) ) {
+
+                        int id = (int) platform;
+
+                        <option value="@id">@platform</option>
+
+                    }
+
+                }
                
             </select>
         </div>
