@@ -1,0 +1,15 @@
+﻿@model List<ProfileData>
+
+@if (Model == null)
+{
+
+}
+else
+{
+	foreach (var profile in Model)
+	{
+		<hr />
+		<partial name="_ProfilePartial" for="@profile" />
+	}
+	<hr />
+}

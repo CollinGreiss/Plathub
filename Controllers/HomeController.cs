@@ -21,10 +21,7 @@ public class HomeController : Controller {
 
     public IActionResult Index() {
 
-
-        return RedirectToAction( "FindGame", new { searchQuery = "Concrete Jungle"} );
-
-        //return View();
+        return View();
 
     }
 
@@ -56,20 +53,29 @@ public class HomeController : Controller {
         return View();
 
     }
-    public IActionResult Library( Game?[] games ) {
+    public IActionResult Library( string? UserId ) {
 
-        /*List<GameData> model = new List<GameData>();
-
-		foreach ( Game game in games ) {
-		
-			model.Add( new GameData(game) );
-		
-		}*/
-
-        var model = dal.GetGameDataByUserId( User.FindFirstValue( ClaimTypes.NameIdentifier ) );
+        if ( UserId == null ) UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var model = dal.GetGameDataByUserId( UserId );
 
         return View( model );
 
+    }
+
+    public IActionResult Friends( string? UserId )
+    {
+        if (UserId == null) UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var model = dal.GetFriendsProfileData(UserId);
+        return View("UserList", model);
+
+    }
+    public IActionResult Profile ( string? UserId )
+    {
+        if (UserId == null) UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var model = dal.GetProfileData(UserId);
+        return View(model);
     }
 
     public IActionResult FindGame( string searchQuery, string? genre, string? platform ) {
@@ -98,6 +104,27 @@ public class HomeController : Controller {
 
         return View( new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier } );
 
+    }
+    public IActionResult AddGameToLibrary( long gameId )
+    {
+        dal.AddGameToLibrary(User.FindFirstValue(ClaimTypes.NameIdentifier), gameId);
+        return RedirectToAction("GameDetails", new { gameId = gameId });
+    }
+
+    public IActionResult LaunchGame ( int steamId )
+    {
+        return Redirect("steam://launch/" + steamId);
+    }
+    public IActionResult AddFriend( string userId )
+    {
+        dal.AddFriend(User.FindFirstValue(ClaimTypes.NameIdentifier), userId);
+        return RedirectToAction("Profile", userId);
+    }
+
+    public IActionResult UserSearch(string search)
+    {
+        var model = dal.SearchProfilesByUsername(search);
+        return View("UserList", model);
     }
 
 }
