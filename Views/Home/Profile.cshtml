@@ -25,7 +25,8 @@
         {
             if (User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.UserId)
             {
-                <a href="#" class="btn btn-primary">Edit Profile</a>
+                <a class="btn btn-primary">Edit Profile</a>
+                <a asp-controller="Home" asp-action="FriendRequests" class="btn btn-primary">Friend Requests</a>
             }
             else
             {

@@ -64,6 +64,26 @@ namespace Plathub.Data
 
 			return friendProfiles;
 		}
+        public List<ProfileData> GetPendingFriends(string userId)
+        {
+            var friendIds = db.Friendships
+                               .Where(f => (f.UserId2 == userId) && !f.Accepted)
+                               .Select(f => f.UserId1)
+                               .ToList();
+
+            var friendsProfileData = new List<ProfileData>();
+
+            foreach (var friendId in friendIds)
+            {
+                var friendProfileData = GetProfileData(friendId);
+                if (friendProfileData != null)
+                {
+                    friendsProfileData.Add(friendProfileData);
+                }
+            }
+
+            return friendsProfileData;
+        }
         public List<ProfileData> GetFriendsProfileData(string userId)
         {
             var friendIds = GetFriendsByUserId(userId).Select(f => f.UserId).ToList();

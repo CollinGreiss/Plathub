@@ -36,7 +36,7 @@ public class HomeController : Controller {
             return NotFound();
 
         }
-        ViewBag.IsGameInLibrary = dal.IsGameInLibrary(User.FindFirstValue(ClaimTypes.NameIdentifier), id);
+        if (User.Identity.IsAuthenticated) ViewBag.IsGameInLibrary = dal.IsGameInLibrary(User.FindFirstValue(ClaimTypes.NameIdentifier), id);
         return View( game );
     
     }
@@ -67,6 +67,16 @@ public class HomeController : Controller {
         if (UserId == null) UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         var model = dal.GetFriendsProfileData(UserId);
+        ViewBag.PendingFriend = false;
+        return View("UserList", model);
+
+    }
+    public IActionResult FriendRequests(string? UserId)
+    {
+        if (UserId == null) UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var model = dal.GetPendingFriends(UserId);
+        ViewBag.PendingFriend = true;
         return View("UserList", model);
 
     }
@@ -120,10 +130,16 @@ public class HomeController : Controller {
         dal.AddFriend(User.FindFirstValue(ClaimTypes.NameIdentifier), userId);
         return RedirectToAction("Profile", new { userId = userId });
     }
+    public IActionResult AcceptFriend(string userId)
+    {
+        dal.AcceptFriendship(User.FindFirstValue(ClaimTypes.NameIdentifier), userId);
+        return RedirectToAction("Profile", new { userId = userId });
+    }
 
     public IActionResult UserSearch(string search)
     {
         var model = dal.SearchProfilesByUsername(search);
+        ViewBag.PendingFriend = false;
         return View("UserList", model);
     }
 
