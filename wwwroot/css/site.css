@@ -124,7 +124,7 @@ a {
 
     font-family: Arial !important;
     font-size: 26px !important;
-    color: #000000 !important;
+    color: #FFFFFF !important;
 
 }
 
@@ -139,7 +139,7 @@ a {
 
     font-family: Arial !important;
     font-size: 19px !important;
-    color: #000000 !important;
+    color: #FFFFFF !important;
 
 }
 
@@ -147,7 +147,7 @@ a {
 
     font-family: Arial !important;
     font-size: 17px !important;
-    color: #000000 !important;
+    color: #FFFFFF !important;
 
 }
 
@@ -291,11 +291,12 @@ a {
     background-position: center;
     background-image: url('../images/platGameCard.png');
     z-index: -1; /* Send it behind the foreground image */
+    border-radius: 10px;
 }
 
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adjust according to your preference */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Adjust according to your preference */
     grid-gap: 10px; /* Adjust the gap between grid items */
 }
 
@@ -304,13 +305,16 @@ a {
     justify-content: center;
     align-items: center;
     position: relative;
+    width: 200px; /* Adjust the width of each grid item */
+    height: 270px;
 }
 
 
 .foreground-image {
     width: 90%;
     height: 90%;
-    object-fit: cover;
+    object-fit: contain;
+    border-radius: 10px;
 }
 
 .image-resize {

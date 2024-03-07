@@ -2,6 +2,7 @@
 using Plathub.APIs;
 using Plathub.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using static Plathub.Models.GenreData;
 using static Plathub.Models.PlatformData;
 
@@ -9,22 +10,44 @@ namespace Plathub.Models;
 
 public class GameData {
 
+    private int? SteamID;
+
 	public long id;
 	public string title;
 	public string image;
-	public int? steamID;
-	public string? releaseDate;
+	public int? steamID {
+
+
+        get {
+
+            if ( SteamID != null && SteamID == -1 ) return null;
+
+            var task = GamesAPI.GetSteamID( game );
+            task.Wait();
+            SteamID = task.Result;
+            if ( SteamID == -1 ) return null;
+            return SteamID;
+
+        }
+        set {
+
+            SteamID = value;
+
+        }
+
+    }
+    public string? releaseDate;
 	public string? year;
 	public GameGenre[] genres;
 	public GamePlatform[] platforms;
+    private Game game;
 
 
     public GameData( Game game ) {
 
-		if ( game.Id == null ) return;
+        this.game = game;
+        if ( game.Id == null ) return;
 		id = (long) game.Id;
-
-        var task = GamesAPI.GetSteamID( game );
 
         title = game.Name;
 		if ( game.Cover != null ) {
@@ -39,7 +62,7 @@ public class GameData {
 		}
 		else image = "https://i.kym-cdn.com/entries/icons/original/000/028/315/cover.jpg";
 
-		year = game.ReleaseDates.Ids.FirstOrDefault().ToString();
+        if (game.ReleaseDates != null) year = game.ReleaseDates.Ids.FirstOrDefault().ToString();
 
         if (game.Genres != null ) {
 
@@ -70,11 +93,6 @@ public class GameData {
             platforms = platformList.ToArray();
 
         }
-
-        task.Wait();
-
-		steamID = task.Result;
-		if ( steamID == -1 ) steamID = null;
 
 
     }

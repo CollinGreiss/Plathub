@@ -21,10 +21,7 @@ public class HomeController : Controller {
 
     public IActionResult Index() {
 
-
-        return RedirectToAction( "FindGame", new { searchQuery = "Concrete Jungle"} );
-
-        //return View();
+        return View();
 
     }
 
