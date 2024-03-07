@@ -209,5 +209,11 @@ namespace Plathub.Data
         {
             return db.UserGames.Any(x => x.UserId == userId && x.GameId == gameId);
         }
+
+        public void UpdateProfile(Profile profile)
+        {
+            db.Profiles.Update(profile);
+            db.SaveChanges();
+        }
     }
 }

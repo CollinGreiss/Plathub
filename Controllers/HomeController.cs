@@ -153,5 +153,22 @@ public class HomeController : Controller {
         dal.RemoveFromLibrary(User.FindFirstValue(ClaimTypes.NameIdentifier), id);
         return RedirectToAction("GameDetails", new { id = id });
     }
+    [HttpGet]
+    public IActionResult EditProfile(string userId)
+    {
+        var model = dal.GetProfile(userId);
+        if (model == null) return RedirectToAction("Index", "Home");
+        return View(model);
+    }
+    [HttpPost]
+    public IActionResult EditProfile(Profile profile)
+    {
+        if (ModelState.IsValid)
+        {
+            dal.UpdateProfile(profile);
+            return RedirectToAction("Profile", new { userId = profile.UserId });
+        }
+        return View(profile);
+    }
 
 }

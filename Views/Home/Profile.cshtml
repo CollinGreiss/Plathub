@@ -14,7 +14,10 @@
             <dt class="col-sm-2">Bio</dt>
             <dd class="col-sm-10">@Model.Bio</dd>
             <dt class="col-sm-2">Birthday</dt>
-            <dd class="col-sm-10">@Model.Birthday</dd>
+            @if (Model.Birthday != null) 
+            {
+                <dd class="col-sm-10"> @Model.Birthday.Value.ToString("yyyy-MM-dd")</dd>
+            }
             <dt class="col-sm-2">Location</dt>
             <dd class="col-sm-10">@Model.Location</dd>
             <dt class="col-sm-2">Favorite Game</dt>
@@ -25,7 +28,7 @@
         {
             if (User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.UserId)
             {
-                <a class="btn btn-primary">Edit Profile</a>
+                <a asp-controller="Home" asp-action="EditProfile" asp-route-userId="@Model.UserId" class="btn btn-primary">Edit Profile</a>
                 <a asp-controller="Home" asp-action="FriendRequests" class="btn btn-primary">Friend Requests</a>
             }
             else
