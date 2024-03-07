@@ -8,6 +8,8 @@ namespace Plathub.Data {
 	public class ApplicationDbContext : IdentityDbContext {
 		public ApplicationDbContext( DbContextOptions<ApplicationDbContext> options ) : base( options ) {}
 		public DbSet<UserGame> UserGames {  get; set; }
+		public DbSet<Friendship> Friendships {  get; set; }
+		public DbSet<Profile> Profiles {  get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -15,6 +17,8 @@ namespace Plathub.Data {
 
             modelBuilder.Entity<UserGame>()
                 .HasKey(x => new { x.UserId, x.GameId });
+
+            modelBuilder.Entity<Friendship>().HasKey(x => new { x.UserId1, x.UserId2 });
         }
     }
 }

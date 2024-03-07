@@ -1,0 +1,21 @@
+﻿@model ProfileData
+
+@if (Model == null)
+{
+
+}
+else
+{
+    string imageSrc = "/assets/noImageAvailable.png";
+    if (Model.Image != null) imageSrc = Model.Image;
+    <a asp-controller="Home" asp-action="Profile" asp-route-UserId="@Model.UserId" class="text-decoration-none">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <img src="@imageSrc" alt="Profile Image" class="mr-3" id="profileImageMini">
+                    <h5 class="card-title">@Model.Username</h5>
+                </div>
+            </div>
+        </div>
+    </a>
+}
