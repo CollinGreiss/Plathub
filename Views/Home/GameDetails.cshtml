@@ -1,87 +1,110 @@
 ﻿@model GameData;
 
 @{
-    ViewData["Title"] = "Game Details";
+	ViewData["Title"] = "Game Details";
 }
 
 <div class="row container-test">
-    <div class="col-2 image-container">
-        <div class="background-container">
-            <img class="image-resize center-image" src="@Url.Content(@Model.image)" />
-        </div>
-    </div>
-    <div class="col-4">
-        <p>Title: @Model.title</p>
-        <p>Platform: Platform</p>
-        <p>Genre: Genre</p>
-        <p>ESRBRating: ESRBRating</p>
-        <p>Release Year: @Model.year</p>
-    </div>
+	<div class="col-2 image-container">
+		<div class="background-container">
+			<img class="image-resize center-image" src="@Url.Content(@Model.image)" />
+		</div>
+	</div>
+	<div class="col-4">
+		<p>Title: @Model.title</p>
+		<p>Platform: @Model.platformsName</p>
+		<p>Genre: @Model.genresName</p>
+		<p>Release Year: @Model.year</p>
+	</div>
 </div>
 
 
 <div class="row">
-    <div class="col-12">
-        <div class="container-test">
-            <div class="tabs">
-                <button class="tablinks" onclick="openTab(event, 'tab1')">Description</button>
-                <button class="tablinks" onclick="openTab(event, 'tab2')">System Requirements</button>
-                <button class="tablinks" onclick="openTab(event, 'tab3')">DLC</button>
-                <button class="tablinks" onclick="openTab(event, 'tab4')">Statistics</button>
-                @if (Model.steamID != null)
-                {
-                    <a asp-controller="Home" asp-action="LaunchGame" asp-route-steamId="@Model.steamID" class="tablinks">Launch Game</a>
-                }
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <div class="row">
-                        <div class="col-12">
-                            @if (ViewBag.IsGameInLibrary)
-                            {
-                                <a asp-controller="Home" asp-action="RemoveFromLibrary" asp-route-id="@Model.id" class="tablinks">Remove Game From Library</a>
-                            }
-                            else
-                            {
-                                <a asp-controller="Home" asp-action="AddToLibrary" asp-route-id="@Model.id" class="tablinks">Add Game To Library</a>
-                            }
-                        </div>
-                    </div>
-                }
-            </div>
-            <div class="container-nested">
-                <div id="tab1" class="tabcontent" style="display: block;">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac metus magna. Duis tincidunt tortor id orci euismod, vel vestibulum nisl tincidunt.</p>
-                </div>
 
-                <div id="tab2" class="tabcontent">
-                    <p>Hello World</p>
-                </div>
+	<div class="col-12">
 
-                <div id="tab3" class="tabcontent">
-                    <!-- Content for Tab 3 -->
-                </div>
+		<div class="container-test">
 
-                <div id="tab4" class="tabcontent">
-                    <!-- Content for Tab 4 -->
-                </div>
-            </div>
-        </div>
-    </div>
+			<div class="tabs">
+
+				<button class="tablinks" onclick="openTab(event, 'description')">Description</button>
+
+				@if ( Model.dlcs != null ) {
+
+					<button class="tablinks" onclick="openTab(event, 'dlcs')">DLC</button>
+
+				}
+
+				@if ( Model.steamID != null ) {
+					<a asp-controller="Home" asp-action="LaunchGame" asp-route-steamId="@Model.steamID" class="tablinks">Launch Game</a>
+				}
+
+				@if ( User.Identity.IsAuthenticated ) {
+
+					@if ( ViewBag.IsGameInLibrary ) {
+
+						<a asp-controller="Home" asp-action="RemoveFromLibrary" asp-route-id="@Model.id" class="tablinks">Remove Game From Library</a>
+
+					} else {
+
+						<a asp-controller="Home" asp-action="AddToLibrary" asp-route-id="@Model.id" class="tablinks">Add Game To Library</a>
+					}
+
+				}
+			</div>
+			<div class="container-nested">
+
+				<div id="description" class="tabcontent" style="display: block;">
+
+					<p>@Model.description</p>
+
+				</div>
+
+				<div id="dlcs" class="tabcontent">
+
+					@if ( Model.dlcs != null ) {
+
+						<div class="container-fluid px-4 mt-3">
+
+							<div class="grid-container">
+
+								@foreach ( var game in Model.dlcs ) {
+									<a class="grid-item" asp-controller="Home" asp-action="GameDetails" asp-route-id="@game.id">
+
+										<partial name="_GamePartialView" for="@game" />
+
+									</a>
+								}
+
+							</div>
+
+						</div>
+
+					}
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
 </div>
 
 <script>
-    // Your JavaScript code here
-    function openTab(evt, tabName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].classList.remove("active");
-        }
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.classList.add("active");
-    }
+
+	function openTab(evt, tabName) {
+		var i, tabcontent, tablinks;
+		tabcontent = document.getElementsByClassName("tabcontent");
+		for (i = 0; i < tabcontent.length; i++) {
+			tabcontent[i].style.display = "none";
+		}
+		tablinks = document.getElementsByClassName("tablinks");
+		for (i = 0; i < tablinks.length; i++) {
+			tablinks[i].classList.remove("active");
+		}
+		document.getElementById(tabName).style.display = "block";
+		evt.currentTarget.classList.add("active");
+	}
 </script>

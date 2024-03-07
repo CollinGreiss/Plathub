@@ -21,7 +21,7 @@ public class GamesAPI {
 
 	public static async Task<Game[]> SearchGames(string search, GameGenre[]? genres, GamePlatform[]? platform, int limit = 10 ) {
 
-		var filter = $"fields *; limit {limit};";
+		var filter = $"fields id, name, summary, cover, platforms, genres, dlcs, first_release_date; limit {limit};";
 
 		if ( search == null || search.Length > 0) filter += $" search \"{search}\";";
 
@@ -97,5 +97,11 @@ public class GamesAPI {
 
 	}
 
+    public static async Task<ReleaseDate> GetReleaseDate( long? id ) {
+        
+		var date = await igdb.QueryAsync<ReleaseDate> (IGDBClient.Endpoints.ReleaseDates, query: $"fields *; where id = {id}; " );
+		return date[0];
+
+    }
 
 }

@@ -36,7 +36,9 @@ public class HomeController : Controller {
             return NotFound();
 
         }
-        ViewBag.IsGameInLibrary = dal.IsGameInLibrary(User.FindFirstValue(ClaimTypes.NameIdentifier), id);
+
+        if (User.Identity.IsAuthenticated) ViewBag.IsGameInLibrary = dal.IsGameInLibrary(User.FindFirstValue(ClaimTypes.NameIdentifier), id);
+        
         return View( game );
     
     }
