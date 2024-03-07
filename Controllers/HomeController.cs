@@ -36,7 +36,7 @@ public class HomeController : Controller {
             return NotFound();
 
         }
-
+        ViewBag.IsGameInLibrary = dal.IsGameInLibrary(User.FindFirstValue(ClaimTypes.NameIdentifier), id);
         return View( game );
     
     }
@@ -118,13 +118,24 @@ public class HomeController : Controller {
     public IActionResult AddFriend( string userId )
     {
         dal.AddFriend(User.FindFirstValue(ClaimTypes.NameIdentifier), userId);
-        return RedirectToAction("Profile", userId);
+        return RedirectToAction("Profile", new { userId = userId });
     }
 
     public IActionResult UserSearch(string search)
     {
         var model = dal.SearchProfilesByUsername(search);
         return View("UserList", model);
+    }
+
+    public IActionResult AddToLibrary(long id)
+    {
+        dal.AddGameToLibrary(User.FindFirstValue(ClaimTypes.NameIdentifier), id);
+        return RedirectToAction("GameDetails", new { id = id });
+    }
+    public IActionResult RemoveFromLibrary(long id)
+    {
+        dal.RemoveFromLibrary(User.FindFirstValue(ClaimTypes.NameIdentifier), id);
+        return RedirectToAction("GameDetails", new { id = id });
     }
 
 }

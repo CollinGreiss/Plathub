@@ -14,6 +14,8 @@ namespace Plathub.Interfaces
         public ProfileData GetProfileData(string userId);
         public List<ProfileData> GetFriendsProfileData(string userId);
         public List<ProfileData> SearchProfilesByUsername(string searchString);
+        public bool IsGameInLibrary(string userId, long gameId);
+        public void RemoveFromLibrary(string userId, long gameId);
 
     }
 }

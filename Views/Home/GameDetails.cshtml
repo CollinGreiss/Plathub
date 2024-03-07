@@ -32,6 +32,21 @@
                 {
                     <a asp-controller="Home" asp-action="LaunchGame" asp-route-steamId="@Model.steamID" class="tablinks">Launch Game</a>
                 }
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="row">
+                        <div class="col-12">
+                            @if (ViewBag.IsGameInLibrary)
+                            {
+                                <a asp-controller="Home" asp-action="RemoveFromLibrary" asp-route-id="@Model.id" class="tablinks">Remove Game From Library</a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Home" asp-action="AddToLibrary" asp-route-id="@Model.id" class="tablinks">Add Game To Library</a>
+                            }
+                        </div>
+                    </div>
+                }
             </div>
             <div class="container-nested">
                 <div id="tab1" class="tabcontent" style="display: block;">

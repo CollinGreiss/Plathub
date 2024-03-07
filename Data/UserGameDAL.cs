@@ -22,10 +22,14 @@ namespace Plathub.Data
             db.SaveChanges();
         }
 
-        public void RemoveGameFromLibrary(UserGame model)
+        public void RemoveFromLibrary(string userId, long gameId)
         {
-            db.UserGames.Remove(model);
-            db.SaveChanges();
+            var userGame = db.UserGames.FirstOrDefault(x => x.UserId == userId && x.GameId == gameId);
+            if (userGame != null)
+            {
+                db.UserGames.Remove(userGame);
+                db.SaveChanges();
+            }
         }
 
         public List<long> GetGameIdsByUserId(string userId)
@@ -79,8 +83,7 @@ namespace Plathub.Data
 
         public void AddFriend(string userId1, string userId2)
 		{
-			var existingFriendship = db.Friendships
-										 .FirstOrDefault(f => (f.UserId1 == userId1 && f.UserId2 == userId2) || (f.UserId1 == userId2 && f.UserId2 == userId1));
+			var existingFriendship = db.Friendships.FirstOrDefault(f => (f.UserId1 == userId1 && f.UserId2 == userId2) || (f.UserId1 == userId2 && f.UserId2 == userId1));
 
 			if (existingFriendship != null)
 			{
@@ -180,6 +183,11 @@ namespace Plathub.Data
                 .ToList();
 
             return profileData;
+        }
+
+        public bool IsGameInLibrary(string userId, long gameId)
+        {
+            return db.UserGames.Any(x => x.UserId == userId && x.GameId == gameId);
         }
     }
 }
