@@ -1,4 +1,4 @@
-﻿using IGDB.Models;
+using IGDB.Models;
 using Microsoft.CodeAnalysis;
 using Plathub.APIs;
 using Plathub.Data;
@@ -125,7 +125,7 @@ public class GameData {
 				if ( genre != null ) {
 
 					genresList.Append( (GameGenre) genre );
-					genresName += ( (GameGenre) genre ).ToString() + ", ";
+					genresName += ( (GamePlatform) genre ).ToString() + ", ";
 
 				}
 
