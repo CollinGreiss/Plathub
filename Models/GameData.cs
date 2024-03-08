@@ -1,4 +1,5 @@
-﻿using IGDB.Models;
+using IGDB.Models;
+using Microsoft.CodeAnalysis;
 using Plathub.APIs;
 using Plathub.Data;
 using System.Linq;
@@ -10,46 +11,94 @@ namespace Plathub.Models;
 
 public class GameData {
 
-    private int? SteamID;
-
 	public long id;
-	public string title;
-	public string image;
+
+	private int? SteamID;
 	public int? steamID {
 
 
-        get {
+		get {
 
-            if ( SteamID != null && SteamID == -1 ) return null;
+			if ( SteamID != null && SteamID == -1 ) return null;
 
-            var task = GamesAPI.GetSteamID( game );
-            task.Wait();
-            SteamID = task.Result;
-            if ( SteamID == -1 ) return null;
-            return SteamID;
+			var task = GamesAPI.GetSteamID( game );
+			task.Wait();
+			SteamID = task.Result;
+			if ( SteamID == -1 ) return null;
+			return SteamID;
 
-        }
-        set {
+		}
+		set {
 
-            SteamID = value;
+			SteamID = value;
 
-        }
+		}
 
-    }
-    public string? releaseDate;
+	}
+
 	public string? year;
 	public GameGenre[] genres;
 	public GamePlatform[] platforms;
-    private Game game;
+	private Game game;
+
+	public string title;
+	public string image;
+	public string description;
+	public string platformsName = "";
+	public string genresName = "";
+
+	private GameData[]? Dlcs = null;
+	private long[]? dlcIds;
+	public GameData[]? dlcs {
 
 
-    public GameData( Game game ) {
+		get {
 
-        this.game = game;
-        if ( game.Id == null ) return;
+			if ( Dlcs != null && Dlcs.Length > 0 ) return Dlcs;
+			if ( Dlcs != null ) return null;
+
+			if ( dlcIds == null ) {
+
+				Dlcs = new GameData[0];
+				return null;
+
+			}
+
+			var dlcList = new List<GameData>();
+
+			foreach ( var Id in dlcIds ) {
+
+				var dlcTask = GamesAPI.GetGame( (int) Id );
+				dlcTask.Wait();
+				var dlc = dlcTask.Result;
+				if (dlc != null ) dlcList.Add( new GameData( dlc ) );
+
+			}
+
+			Dlcs = dlcList.ToArray();
+			if ( Dlcs.Length == 0 ) return null;
+
+			return Dlcs;
+
+		}
+		set {
+
+			Dlcs = value;
+
+		}
+
+	}
+
+
+	public GameData( Game game ) {
+
+		this.game = game;
+		if ( game.Id == null ) return;
 		id = (long) game.Id;
 
-        title = game.Name;
+		description = game.Summary;
+
+		title = game.Name;
 		if ( game.Cover != null ) {
 
 			var CoverTask = GamesAPI.GetCover( (long) game.Cover.Id );
@@ -57,44 +106,58 @@ public class GameData {
 			var cover = CoverTask.Result;
 
 			image = cover.Url;
-			
+
+
+		} else image = "https://i.kym-cdn.com/entries/icons/original/000/028/315/cover.jpg";
+
+		if ( game.FirstReleaseDate != null ) {
+
+			year = game.FirstReleaseDate.Value.ToString( "dd/MM/yyyy " );
 
 		}
-		else image = "https://i.kym-cdn.com/entries/icons/original/000/028/315/cover.jpg";
 
-        if (game.ReleaseDates != null) year = game.ReleaseDates.Ids.FirstOrDefault().ToString();
+		if ( game.Genres != null ) {
 
-        if (game.Genres != null ) {
+			var genresList = new List<GameGenre>();
 
-            var genresList = new List<GameGenre>();
+			foreach ( var genre in game.Genres.Ids ) {
 
-            foreach ( var genre in game.Genres.Ids ) {
+				if ( genre != null ) {
 
-                if ( genre != null )
-                    genresList.Append( (GameGenre) genre );
+					genresList.Append( (GameGenre) genre );
+					genresName += ( (GamePlatform) genre ).ToString() + ", ";
 
-            }
+				}
 
-            genres = genresList.ToArray();
+			}
 
-        }
+			genres = genresList.ToArray();
+			if ( genresName.Length > 0 ) genresName = genresName.Substring( 0, genresName.Length - 2 );
+
+		}
 
 		if ( game.Platforms != null ) {
 
-            var platformList = new List<GamePlatform>();
+			var platformList = new List<GamePlatform>();
 
-            foreach ( var platform in game.Platforms.Ids ) {
+			foreach ( var platform in game.Platforms.Ids ) {
 
-                if ( platform != null )
-                    platformList.Append( (GamePlatform) platform );
+				if ( platform != null ) {
 
-            }
+					platformList.Append( (GamePlatform) platform );
+					platformsName += ( (GamePlatform) platform ).ToString() + ", ";
 
-            platforms = platformList.ToArray();
+				}
+			}
 
-        }
+			dlcIds = game.Dlcs?.Ids;
+
+			platforms = platformList.ToArray();
+			if ( platformsName.Length > 0 ) platformsName = platformsName.Substring( 0, platformsName.Length - 2 );
+
+		}
 
 
-    }
+	}
 
 }

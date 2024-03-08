@@ -2,18 +2,29 @@
 
 @if (Model == null)
 {
-
 }
 else
 {
-    string imageSrc = "/assets/noImageAvailable.png";
+    string imageSrc = "/images/noImageAvailable.png";
     if (Model.Image != null) imageSrc = Model.Image;
     <a asp-controller="Home" asp-action="Profile" asp-route-UserId="@Model.UserId" class="text-decoration-none">
         <div class="card">
             <div class="card-body">
                 <div class="d-flex align-items-center">
-                    <img src="@imageSrc" alt="Profile Image" class="mr-3" id="profileImageMini">
-                    <h5 class="card-title">@Model.Username</h5>
+                    <img src="@imageSrc" alt="Profile Image" class="mr-3 profile-image-mini">
+                    <div>
+                        <h5 class="card-title">@Model.Username</h5>
+                    </div>
+                    <div>
+                        @if (ViewBag.NotAccepted != null && ViewBag.NotAccepted)
+                        {
+                            <a asp-controller="Home" asp-action="AcceptFriend" asp-route-UserId="@Model.UserId" class="btn btn-primary">Accept Friend</a>
+                        }
+                        @if (ViewBag.Pending != null && ViewBag.Pending)
+                        {
+                            <a class="btn btn-primary">Pending</a>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
