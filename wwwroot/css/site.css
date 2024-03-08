@@ -320,3 +320,11 @@ a {
     border-radius: 10px; /* Adjust border-radius to control the roundness of the image */
     overflow: hidden; /* Ensure that rounded corners clip any overflow from the image */
 }
+.profile-image {
+    width: 300px;
+    height: 300px;
+}
+.profile-image-mini {
+    width: 100px;
+    height: 100px;
+}

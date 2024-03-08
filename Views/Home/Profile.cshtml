@@ -1,48 +1,82 @@
-﻿@model ProfileData
+﻿@model Plathub.Models.ProfileData
 @using System.Security.Claims
 
-@{
-    ViewData["Title"] = "Profile";
-}
-
-<div class="row">
-    <div class="col-md-6">
-        <h2>Profile</h2>
-        <dl class="row">
-            <dt class="col-sm-2">Username</dt>
-            <dd class="col-sm-10">@Model.Username</dd>
-            <dt class="col-sm-2">Bio</dt>
-            <dd class="col-sm-10">@Model.Bio</dd>
-            <dt class="col-sm-2">Birthday</dt>
-            @if (Model.Birthday != null) 
-            {
-                <dd class="col-sm-10"> @Model.Birthday.Value.ToString("yyyy-MM-dd")</dd>
-            }
-            <dt class="col-sm-2">Location</dt>
-            <dd class="col-sm-10">@Model.Location</dd>
-            <dt class="col-sm-2">Favorite Game</dt>
-            <dd class="col-sm-10">@Model.FavoriteGame</dd>
-        </dl>
-
-        @if (User.Identity.IsAuthenticated)
-        {
-            if (User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.UserId)
-            {
-                <a asp-controller="Home" asp-action="EditProfile" asp-route-userId="@Model.UserId" class="btn btn-primary">Edit Profile</a>
-                <a asp-controller="Home" asp-action="FriendRequests" class="btn btn-primary">Friend Requests</a>
-            }
-            else
-            {
-                <form asp-controller="Home" asp-action="AddFriend" method="post">
-                    <input type="hidden" name="userId" value="@Model.UserId" />
-                    <button type="submit" class="btn btn-primary">Add Friend</button>
-                </form>
-            }
-        }
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <img src="@Model.Image" class="card-img-top">
+                <div class="card-body">
+                    <h2 class="card-title">@Model.Username</h2>
+                    <dl class="row">
+                        <dt class="col-sm-4">Bio</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.Bio != null)
+                            {
+                                @Model.Bio
+                            }
+                            else
+                            {
+                                <div>n/a</div>
+                            }
+                        </dd>
+                        <dt class="col-sm-4">Birthday</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.Birthday != null)
+                            {
+                                @Model.Birthday?.ToString( "dd/MM/yyyy " )
+                            }
+                            else
+                            {
+                                <div>n/a</div>
+                            }
+                        </dd>
+                        <dt class="col-sm-4">Location</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.Location != null)
+                            {
+                                @Model.Location
+                            }
+                            else
+                            {
+                                <div>n/a</div>
+                            }
+                        </dd>
+                        <dt class="col-sm-4">Favorite Game</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.FavoriteGame != null)
+                            {
+                                <a asp-controller="Home" asp-action="GameDetails" asp-route-id="@Model.FavoriteGame.id">@Model.FavoriteGame.title</a>
+                            }
+                            else
+                            {
+                                <div>n/a</div>
+                            }
+                        </dd>
+                    </dl>
+                    @if (User.Identity.IsAuthenticated && User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.UserId)
+                    {
+                        <div class="text-center">
+                            <a asp-controller="Home" asp-action="EditProfile" asp-route-userId="@Model.UserId" class="btn btn-primary mr-2">Edit Profile</a>
+                            <a asp-controller="Home" asp-action="FriendRequests" class="btn btn-primary mr-2">Friend Requests</a>
+                            <a asp-controller="Home" asp-action="PendingRequests" class="btn btn-primary">Pending Requests</a>
+                        </div>
+                    }
+                    else if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="text-center">
+                            <form asp-controller="Home" asp-action="AddFriend" method="post">
+                                <input type="hidden" name="userId" value="@Model.UserId" />
+                                <button type="submit" class="btn btn-primary">Add Friend</button>
+                            </form>
+                        </div>
+                    }
+                    <div class="text-center mt-3">
+                        <a asp-controller="Home" asp-action="Friends" asp-route-UserId="@Model.UserId" class="btn btn-primary mr-2">Friends</a>
+                        <a asp-controller="Home" asp-action="Library" asp-route-UserId="@Model.UserId" class="btn btn-primary">Games</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-
-<div class="row">
-    <a asp-controller="Home" asp-action="Friends" asp-route-UserId="@Model.UserId" class="btn btn-primary">Friends</a>
-    <a asp-controller="Home" asp-action="Library" asp-route-UserId="@Model.UserId" class="btn btn-primary">Games</a>
 </div>

@@ -125,7 +125,7 @@ public class GameData {
 				if ( genre != null ) {
 
 					genresList.Append( (GameGenre) genre );
-					genresName += ( (GamePlatform) genre ).ToString() + ", ";
+					genresName += ( (GameGenre) genre ).ToString() + ", ";
 
 				}
 

@@ -17,6 +17,9 @@ namespace Plathub.Interfaces
         public bool IsGameInLibrary(string userId, long gameId);
         public void RemoveFromLibrary(string userId, long gameId);
         public List<ProfileData> GetPendingFriends(string userId);
+        public List<ProfileData> GetFriendRequests(string userId);
         public void UpdateProfile(Profile profile);
-    }
+        public void SetFavoriteGame(string userId, long gameId);
+
+	}
 }

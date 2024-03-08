@@ -1,5 +1,6 @@
 ﻿using Humanizer.Localisation;
 using IGDB.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Plathub.APIs;
 using Plathub.Data;
@@ -53,6 +54,7 @@ public class HomeController : Controller {
         return View();
 
     }
+    [Authorize]
     public IActionResult Library( string? UserId ) {
 
         if ( UserId == null ) UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -67,18 +69,27 @@ public class HomeController : Controller {
         if (UserId == null) UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         var model = dal.GetFriendsProfileData(UserId);
-        ViewBag.PendingFriend = false;
+        ViewBag.NotAccepted = false;
         return View("UserList", model);
 
     }
+    [Authorize]
     public IActionResult FriendRequests(string? UserId)
     {
         if (UserId == null) UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        var model = dal.GetPendingFriends(UserId);
-        ViewBag.PendingFriend = true;
+        var model = dal.GetFriendRequests(UserId);
+        ViewBag.NotAccepted = true;
         return View("UserList", model);
+    }
+    [Authorize]
+    public IActionResult PendingRequests(string? UserId)
+    {
+        if (UserId == null) UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+        var model = dal.GetPendingFriends(UserId);
+        ViewBag.Pending = true;
+        return View("UserList", model);
     }
     public IActionResult Profile ( string? UserId )
     {
@@ -115,6 +126,7 @@ public class HomeController : Controller {
         return View( new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier } );
 
     }
+    [Authorize]
     public IActionResult AddGameToLibrary( long gameId )
     {
         dal.AddGameToLibrary(User.FindFirstValue(ClaimTypes.NameIdentifier), gameId);
@@ -125,11 +137,13 @@ public class HomeController : Controller {
     {
         return Redirect("steam://launch/" + steamId);
     }
+    [Authorize]
     public IActionResult AddFriend( string userId )
     {
         dal.AddFriend(User.FindFirstValue(ClaimTypes.NameIdentifier), userId);
         return RedirectToAction("Profile", new { userId = userId });
     }
+    [Authorize]
     public IActionResult AcceptFriend(string userId)
     {
         dal.AcceptFriendship(User.FindFirstValue(ClaimTypes.NameIdentifier), userId);
@@ -142,25 +156,32 @@ public class HomeController : Controller {
         ViewBag.PendingFriend = false;
         return View("UserList", model);
     }
-
+    [Authorize]
     public IActionResult AddToLibrary(long id)
     {
         dal.AddGameToLibrary(User.FindFirstValue(ClaimTypes.NameIdentifier), id);
         return RedirectToAction("GameDetails", new { id = id });
     }
+    [Authorize]
     public IActionResult RemoveFromLibrary(long id)
     {
         dal.RemoveFromLibrary(User.FindFirstValue(ClaimTypes.NameIdentifier), id);
         return RedirectToAction("GameDetails", new { id = id });
     }
-    [HttpGet]
+    [Authorize]
+    public IActionResult SetFavoriteGame(long id)
+    {
+        dal.SetFavoriteGame(User.FindFirstValue(ClaimTypes.NameIdentifier), id);
+		return RedirectToAction("GameDetails", new { id = id });
+	}
+    [HttpGet, Authorize]
     public IActionResult EditProfile(string userId)
     {
         var model = dal.GetProfile(userId);
         if (model == null) return RedirectToAction("Index", "Home");
         return View(model);
     }
-    [HttpPost]
+    [HttpPost, Authorize]
     public IActionResult EditProfile(Profile profile)
     {
         if (ModelState.IsValid)

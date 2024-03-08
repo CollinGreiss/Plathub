@@ -16,6 +16,7 @@ else
         <hr />
         <form asp-action="EditProfile" method="post">
             <input type="hidden" asp-for="UserId" />
+            <input type="hidden" asp-for="FavoriteGame" />
             <div class="mb-3">
                 <label asp-for="Image" class="form-label">Profile Image (Link)</label>
                 <input asp-for="Image" class="form-control" placeholder="Enter the URL of the image" />
